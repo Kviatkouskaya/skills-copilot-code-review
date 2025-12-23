@@ -17,7 +17,7 @@ router = APIRouter(
 
 class Announcement(BaseModel):
     """Announcement model"""
-    message: str = Field(..., min_length=1, max_length=500)
+    message: str = Field(..., max_length=500)
     start_date: Optional[str] = None
     expiration_date: str
     
@@ -32,7 +32,7 @@ class Announcement(BaseModel):
 
 class AnnouncementUpdate(BaseModel):
     """Announcement update model"""
-    message: Optional[str] = Field(None, min_length=1, max_length=500)
+    message: Optional[str] = Field(None, max_length=500)
     start_date: Optional[str] = None
     expiration_date: Optional[str] = None
     
