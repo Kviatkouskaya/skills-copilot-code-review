@@ -5,7 +5,7 @@ Announcements endpoints for the High School Management System API
 from fastapi import APIRouter, HTTPException
 from typing import Dict, Any, List, Optional
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from ..database import announcements_collection, teachers_collection
 
@@ -20,6 +20,14 @@ class Announcement(BaseModel):
     message: str = Field(..., min_length=1, max_length=500)
     start_date: Optional[str] = None
     expiration_date: str
+    
+    @field_validator('message')
+    @classmethod
+    def validate_message_not_empty(cls, v: str) -> str:
+        """Validate that message is not empty or whitespace-only"""
+        if not v.strip():
+            raise ValueError('Message cannot be empty or contain only whitespace')
+        return v.strip()
 
 
 class AnnouncementUpdate(BaseModel):
@@ -27,6 +35,14 @@ class AnnouncementUpdate(BaseModel):
     message: Optional[str] = Field(None, min_length=1, max_length=500)
     start_date: Optional[str] = None
     expiration_date: Optional[str] = None
+    
+    @field_validator('message')
+    @classmethod
+    def validate_message_not_empty(cls, v: Optional[str]) -> Optional[str]:
+        """Validate that message is not empty or whitespace-only"""
+        if v is not None and not v.strip():
+            raise ValueError('Message cannot be empty or contain only whitespace')
+        return v.strip() if v is not None else None
 
 
 def verify_teacher(username: str) -> Dict[str, Any]:
