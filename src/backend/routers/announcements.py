@@ -136,14 +136,14 @@ def update_announcement(
     
     # Validate dates if both are provided or if one is being updated
     try:
-        exp_date = update_doc.get("expiration_date", existing.get("expiration_date"))
+        expiration_date_str = update_doc.get("expiration_date", existing.get("expiration_date"))
         start_date = update_doc.get("start_date", existing.get("start_date"))
         
-        if exp_date:
-            expiration_date = datetime.fromisoformat(exp_date.replace('Z', '+00:00'))
+        if expiration_date_str:
+            expiration_date = datetime.fromisoformat(expiration_date_str.replace('Z', '+00:00'))
         if start_date:
             start_date_dt = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
-            if exp_date and start_date_dt >= expiration_date:
+            if expiration_date_str and start_date_dt >= expiration_date:
                 raise HTTPException(
                     status_code=400, 
                     detail="Start date must be before expiration date"
