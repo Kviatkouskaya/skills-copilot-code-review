@@ -130,7 +130,9 @@ def update_announcement(
     if announcement.message is not None:
         update_doc["message"] = announcement.message
     if announcement.start_date is not None:
-        update_doc["start_date"] = announcement.start_date
+        cleaned_start_date = announcement.start_date.strip()
+        if cleaned_start_date:
+            update_doc["start_date"] = cleaned_start_date
     if announcement.expiration_date is not None:
         update_doc["expiration_date"] = announcement.expiration_date
     
