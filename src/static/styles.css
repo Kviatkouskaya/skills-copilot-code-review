@@ -27,6 +27,7 @@
   --warning: #ff9800;
   --warning-light: #fff3cd;
   --error: #c62828;
+  --error-dark: #b71c1c;
   --error-light: #ffebee;
   --info: #0c5460;
   --info-light: #d1ecf1;
@@ -867,7 +868,7 @@ footer {
 }
 
 .delete-announcement-btn:hover {
-  background-color: #b71c1c;
+  background-color: var(--error-dark);
 }
 
 .announcement-item-message {
