@@ -37,6 +37,11 @@ def verify_teacher(username: str) -> Dict[str, Any]:
     return teacher
 
 
+def parse_iso_datetime(date_string: str) -> datetime:
+    """Parse ISO format datetime string, handling 'Z' timezone indicator"""
+    return datetime.fromisoformat(date_string.replace('Z', '+00:00'))
+
+
 @router.get("/active")
 def get_active_announcements() -> List[Dict[str, Any]]:
     """Get all active announcements (current date is between start and expiration dates)"""
@@ -81,9 +86,9 @@ def create_announcement(announcement: Announcement, username: str) -> Dict[str, 
     
     # Validate dates
     try:
-        expiration_date = datetime.fromisoformat(announcement.expiration_date.replace('Z', '+00:00'))
+        expiration_date = parse_iso_datetime(announcement.expiration_date)
         if announcement.start_date:
-            start_date = datetime.fromisoformat(announcement.start_date.replace('Z', '+00:00'))
+            start_date = parse_iso_datetime(announcement.start_date)
             if start_date >= expiration_date:
                 raise HTTPException(
                     status_code=400, 
@@ -140,9 +145,9 @@ def update_announcement(
         start_date = update_doc.get("start_date", existing.get("start_date"))
         
         if exp_date:
-            expiration_date = datetime.fromisoformat(exp_date.replace('Z', '+00:00'))
+            expiration_date = parse_iso_datetime(exp_date)
         if start_date:
-            start_date_dt = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+            start_date_dt = parse_iso_datetime(start_date)
             if exp_date and start_date_dt >= expiration_date:
                 raise HTTPException(
                     status_code=400, 
