@@ -38,7 +38,19 @@ def verify_teacher(username: str) -> Dict[str, Any]:
 
 
 def parse_iso_datetime(date_string: str) -> datetime:
-    """Parse ISO format datetime string, handling 'Z' timezone indicator"""
+    """Parse ISO format datetime string, handling 'Z' timezone indicator
+    
+    Args:
+        date_string: ISO format datetime string (e.g., '2024-01-01T00:00:00Z')
+        
+    Returns:
+        datetime object
+        
+    Raises:
+        ValueError: If date_string is None, empty, or invalid format
+    """
+    if not date_string:
+        raise ValueError("Date string cannot be None or empty")
     return datetime.fromisoformat(date_string.replace('Z', '+00:00'))
 
 
